@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.gem</groupId>
+	<artifactId>gem-model</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>gem-model</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- <dependency> <groupId>javax.xml</groupId> <artifactId>jaxb-api</artifactId> 
+			<version>2.1</version> </dependency> -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>3.4.0.GA</version>
+			<scope>compile</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.sun.tools.jxc.maven2</groupId>
+				<artifactId>maven-jaxb-schemagen-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<srcdir>src/main/java</srcdir>
+					<excludes>
+						<exclude>com/gem/bean/**</exclude>
+					</excludes>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
+			<!-- Ant plugin to copy generated schema in target directory. -->
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<tasks>
+						<copy file="target/generated-schema/schema1.xsd" tofile="target/classes/schemas/com/gem/gem-schema.xsd" />
+						<copy file="target/generated-schema/schema2.xsd" tofile="target/classes/schemas/com/gem/gem-types.xsd" />
+						<copy file="target/generated-schema/schema1.xsd" tofile="target/classes/schemas/com/gem/schema1.xsd" />
+						<copy file="target/generated-schema/schema2.xsd" tofile="target/classes/schemas/com/gem/schema2.xsd" />
+						<copy file="src/main/java/com/gem/model/jaxb.index" tofile="target/classes/com/gem/model/jaxb.index" />
+						<copy file="src/main/java/com/gem/xml/ws/jaxb.index" tofile="target/classes/com/gem/xml/ws/jaxb.index" />
+					</tasks>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>maven-repository.dev.java.net</id>
+			<name>Java.net Maven 2 Repository</name>
+			<url>http://download.java.net/maven/2</url>
+		</pluginRepository>
+	</pluginRepositories>
+</project>
